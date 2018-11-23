@@ -1,0 +1,38 @@
+.hero {
+    background-image:url('../../assets/images/hero-header/01.jpg');
+}
+
+.not-transparent-header .navbar-default {
+    background: #20262F;
+    background: #9932CC;
+    background: #3b5998;
+}
+
+.navbar.navbar-default {
+    margin: 0;
+    padding: 20px 0;
+    height: auto;
+}
+
+.navbar-default {
+    background: #9932CC;
+    background-color: #4a004a;
+    background-color: #8B008B;
+    background: #3b5998;
+    padding: 8px !important
+}
+
+.job-item-list {
+    color: #000 ;
+    padding-left: 0px !important
+   
+}
+
+.job-item-list .texing {
+    font-size: 13px;
+    color: #000;
+}
+
+#ProfileModal {
+    width: 750px !important
+}
