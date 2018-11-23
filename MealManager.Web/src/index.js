@@ -6,6 +6,8 @@ import App from './app/App';
 import { history } from "./_helpers/history";
 import * as serviceWorker from './serviceWorker';
 
+import "../node_modules/toastr/build/toastr.min.css";
+
 ReactDOM.render(
 
     <Router history={history}>

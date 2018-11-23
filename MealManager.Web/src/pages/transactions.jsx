@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+import toastr from "toastr";
 
 import SideBar from "../components/common/sidebar";
 
@@ -14,7 +15,8 @@ class Transaction extends Component {
 
         this.state = {
             userId: '',
-            users: []
+            users: [],
+            menus: []
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -22,14 +24,22 @@ class Transaction extends Component {
 
     componentDidMount() {
         this.getUsers();
+        this.getMenus();
     }
-
     
+
 	handleChange(e) {
 		const { name, value } = e.target;
 		this.setState({ [name]: value });
 	}
 
+    onHandleClick(e) {
+        e.preventDefault();
+
+        const { userId } = this.state;
+
+        console.log(userId);
+    }
 
     render() {
 
@@ -71,11 +81,6 @@ class Transaction extends Component {
 
                                     <h2 className="heading mb-15">Meal Transactions</h2>
 
-                                    {/* <div className="meta-div clearfix mb-25">
-                                        <span>at <a href="#">Expedia</a> as </span>
-                                        <span className="job-label label label-success">Freelance</span>
-                                    </div> */}
-
                                 </div>
 
                                 <div className="tab-style-01">
@@ -112,9 +117,9 @@ class Transaction extends Component {
                                                             </div>
                                                          
                                                             <div className="GridLex-col-2_sm-4_xs-4_xss-12">
-                                                                <div className="job-label label label-success">
-                                                                    Order
-                                                                </div>
+                                                               
+                                                                <button type="button" onClick={(e) => this.onHandleClick(e)} className="job-label label label-success" aria-hidden="true">Order</button>
+
                                                             </div>
                                                         </div>
                                                     </a>
@@ -226,12 +231,21 @@ class Transaction extends Component {
     // Get all users
     getUsers() { 
         axios.get(myConfig.apiUrl + "/api/accounts/user/profiles")
-            .then(response => { 
-                console.log(response);
+            .then(response => {
+                toastr.success("Change Successful.", "Password Change");
                 this.setState({ users: response.data }); 
             }) 
     }
 
+    getMenus() { 
+        axios.get(myConfig.apiUrl + "/api/lookups/menus")
+            .then(response => {
+                toastr.success("Change Successful.", "Password Change");
+                this.setState({ menus: response.data }); 
+            }) 
+    }
+
+    // MealMenu
 
 }
 
