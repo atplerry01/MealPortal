@@ -1,0 +1,70 @@
+.hero {
+    background-image:url('../../assets/images/hero-header/01.jpg');
+}
+
+.not-transparent-header .navbar-default {
+    background: #20262F;
+    background: #9932CC;
+    background: #3b5998;
+}
+
+.navbar.navbar-default {
+    margin: 0;
+    padding: 20px 0;
+    height: auto;
+}
+
+.navbar-default {
+    background: #9932CC;
+    background-color: #4a004a;
+    background-color: #8B008B;
+    background: #3b5998;
+    padding: 8px !important
+}
+
+.job-item-list {
+    color: #000 ;
+    padding-left: 0px !important
+   
+}
+
+.job-item-list .texing {
+    font-size: 13px;
+    color: #000;
+}
+
+#ProfileModal {
+    width: 750px !important
+}
+
+
+
+.category-item-09 {
+    background-image:url('../../assets/images/location/07.jpg');
+}
+
+.category-item-09 .one {
+    background-image:url('../../assets/images/location/07.jpg');
+}
+
+.category-item-01 {
+    width: 100%;
+    position: relative;
+    background-size: cover;
+    background-position: center center;
+    line-height: 1.2;
+    color: #FFF;
+    background-image:url('../../assets/images/location/07.jpg');
+}
+
+.pt-80 {
+    padding-top: 20px !important;
+}
+
+.section-title {
+    margin: 0 0 20px;
+}
+
+.tab-style-01 {
+    margin-top: 1px !important;
+}
