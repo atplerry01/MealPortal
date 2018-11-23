@@ -9,7 +9,7 @@ namespace MealManager.Api.ViewModel.Transact
         public int Id { get; set; }
         public virtual ApplicationUserModel User { get; set; }
         public virtual MenuModel Menu { get; set; }
-        public virtual UserMealProfilingModel UserMealProfiling { get; set; }
+        //public virtual UserMealProfilingModel UserMealProfiling { get; set; }
         public DateTime CreatedOn { get; set; }
     }
 }

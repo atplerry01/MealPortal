@@ -18,7 +18,7 @@ namespace MealManager.Api.Models.Transact
 
         public virtual ApplicationUser User { get; set; }
         public virtual Menu Menu { get; set; }
-        public virtual UserMealProfiling UserMealProfiling { get; set; }
+        //public virtual UserMealProfiling UserMealProfiling { get; set; }
         public DateTime CreatedOn { get; set; }
         
     }
