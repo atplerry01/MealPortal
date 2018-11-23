@@ -18,7 +18,7 @@ class App extends Component {
       <Router history={history} {...this.state}>
         <div className="container-wrapper">
 
-          <Header></Header>
+          <Header history={history} {...this.state}></Header>
 
           <div className="main-wrapper">
             <div className="cont">

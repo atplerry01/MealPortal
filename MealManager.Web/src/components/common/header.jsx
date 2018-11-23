@@ -1,17 +1,53 @@
 import React, { Component } from 'react';
 import { NavLink } from "react-router-dom";
+import axios from "axios";
+
+import { myConfig } from "../../app/config";
 
 class Header extends Component {
     constructor(props, context) {
         super(props, context);
 
         this.state = {
-
+            username: '',
+            password: '',
+            confirmPassword: '',
+            email:'',
+            authenticated: false,
+            registering: false,
+            errors: [],
+            error: ''
         };
 
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        
+    }
+
+    handleChange(e) {
+        const { name, value } = e.target;
+        this.setState({ [name]: value });
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+
+        const { username, password } = this.state;
+
+        var modelData = {
+            username, password
+        }
+
+        if (modelData.username && modelData.password) {
+            console.log(modelData);
+            this.postLogin(modelData);
+        }
     }
 
     render() {
+
+        const { username, password } = this.state;
+        
         return (
 
             <header id="header">
@@ -81,6 +117,7 @@ class Header extends Component {
                     <div className="modal-body">
                         <div className="row gap-20">
 
+{/*
                             <div className="col-sm-6 col-md-6">
                                 <button className="btn btn-facebook btn-block mb-5-xs">Log-in with Facebook</button>
                             </div>
@@ -94,11 +131,12 @@ class Header extends Component {
                                 </div>
                             </div>
 
+*/}
                             <div className="col-sm-12 col-md-12">
 
                                 <div className="form-group">
                                     <label>Username</label>
-                                    <input className="form-control" placeholder="Min 4 and Max 10 characters" type="text" />
+                                    <input name="username" value={username} onChange={this.handleChange} className="form-control" placeholder="" type="text" />
                                 </div>
 
                             </div>
@@ -107,7 +145,7 @@ class Header extends Component {
 
                                 <div className="form-group">
                                     <label>Password</label>
-                                    <input className="form-control" placeholder="Min 4 and Max 10 characters" type="text" />
+                                    <input name="password" value={password} onChange={this.handleChange} className="form-control" placeholder="" type="password" />
                                 </div>
 
                             </div>
@@ -135,14 +173,13 @@ class Header extends Component {
                     </div>
 
                     <div className="modal-footer text-center">
-                        <button type="button" className="btn btn-primary">Log-in</button>
-                        <button type="button" data-dismiss="modal" className="btn btn-primary btn-inverse">Close</button>
+                        <button type="button" onClick={this.handleSubmit} className="btn btn-primary">Log-in</button>
+                        <button type="button" id="hideLoginPageModal" data-dismiss="modal" className="btn btn-primary btn-inverse">Close</button>
                     </div>
 
                 </div>
 
-                <div id="registerModal" className="modal fade login-box-wrapper" tabIndex="-1" style={{ display: "none" }}
-                    data-backdrop="static" data-keyboard="false" data-replace="true">
+                <div id="registerModal" className="modal fade login-box-wrapper" tabIndex="-1" style={{ display: "none" }} data-backdrop="static" data-keyboard="false" data-replace="true">
 
                     <div className="modal-header">
                         <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -227,8 +264,7 @@ class Header extends Component {
 
                 </div>
 
-                <div id="forgotPasswordModal" className="modal fade login-box-wrapper" tabIndex="-1" style={{ display: "none" }}
-                    data-backdrop="static" data-keyboard="false" data-replace="true">
+                <div id="forgotPasswordModal" className="modal fade login-box-wrapper" tabIndex="-1" style={{ display: "none" }} data-backdrop="static" data-keyboard="false" data-replace="true">
 
                     <div className="modal-header">
                         <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -279,6 +315,28 @@ class Header extends Component {
             </header>
 
         );
+    }
+
+    postLogin = (model) => {
+        var data = "grant_type=password&username=" + model.username + "&password=" + model.password;
+
+        return axios.post(myConfig.apiUrl + "/api/token", data, {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" }
+        }).then(response => {
+            
+            localStorage.setItem("wss.auth", JSON.stringify(response.data));
+            this.setState({authenticated: true});
+            document.getElementById("hideLoginPageModal").click();
+            console.log(this.props);
+            this.props.history.push("/transactions");
+
+        }).catch(error => {
+            // this.setState({errors: error.response.data.errors});
+            const errors = {};
+            errors.message = "Invalid username/ Password";
+            this.setState({ error: 'Invalid username/ Password' });
+            // throw error;
+        });
     }
 
 }

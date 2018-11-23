@@ -49,7 +49,6 @@ namespace MealManager.Api.Controllers
             return Ok(result);
         }
 
-
         
     }
 }
