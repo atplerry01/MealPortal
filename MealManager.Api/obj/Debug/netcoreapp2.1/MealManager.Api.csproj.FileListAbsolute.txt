@@ -12,3 +12,17 @@ C:\development\WSS\MealPortal\MealManager.Api\obj\Debug\netcoreapp2.1\MealManage
 C:\development\WSS\MealPortal\MealManager.Api\obj\Debug\netcoreapp2.1\MealManager.Api.RazorTargetAssemblyInfo.cache
 C:\development\WSS\MealPortal\MealManager.Api\obj\Debug\netcoreapp2.1\MealManager.Api.dll
 C:\development\WSS\MealPortal\MealManager.Api\obj\Debug\netcoreapp2.1\MealManager.Api.pdb
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\bin\Debug\netcoreapp2.1\MealManager.Api.deps.json
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\bin\Debug\netcoreapp2.1\MealManager.Api.runtimeconfig.json
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\bin\Debug\netcoreapp2.1\MealManager.Api.runtimeconfig.dev.json
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\bin\Debug\netcoreapp2.1\MealManager.Api.dll
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\bin\Debug\netcoreapp2.1\MealManager.Api.pdb
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\obj\Debug\netcoreapp2.1\MealManager.Api.csprojAssemblyReference.cache
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\obj\Debug\netcoreapp2.1\MealManager.Api.csproj.CoreCompileInputs.cache
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\obj\Debug\netcoreapp2.1\MealManager.Api.RazorAssemblyInfo.cache
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\obj\Debug\netcoreapp2.1\MealManager.Api.RazorAssemblyInfo.cs
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\obj\Debug\netcoreapp2.1\MealManager.Api.AssemblyInfoInputs.cache
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\obj\Debug\netcoreapp2.1\MealManager.Api.AssemblyInfo.cs
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\obj\Debug\netcoreapp2.1\MealManager.Api.RazorTargetAssemblyInfo.cache
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\obj\Debug\netcoreapp2.1\MealManager.Api.dll
+C:\development\WSS\MealPortalSolution\MealPortalV1\MealManager.Api\obj\Debug\netcoreapp2.1\MealManager.Api.pdb

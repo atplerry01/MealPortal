@@ -68,3 +68,10 @@
 .tab-style-01 {
     margin-top: 1px !important;
 }
+
+.recent-job-item .content p {
+    font-size: 13px;
+    font-weight: 100;
+    margin: 0;
+    line-height: 1;
+}

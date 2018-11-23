@@ -220,12 +220,10 @@ class Transaction extends Component {
 
                                     <ul class="nav" role="tablist">
                                         <li role="presentation" class="active">
-                                            <h4><a href="#relatedJob1" role="tab" data-toggle="tab">More jobs from
-                                                    Expedia</a></h4>
+                                            <h4><a href="#relatedJob1" role="tab" data-toggle="tab">Meal Order</a></h4>
                                         </li>
                                         <li role="presentation">
-                                            <h4><a href="#relatedJob2" role="tab" data-toggle="tab">Similars to this
-                                                    job</a></h4>
+                                            <h4><a href="#relatedJob2" role="tab" data-toggle="tab">Meal Transactions</a></h4>
                                         </li>
                                     </ul>
 
@@ -237,29 +235,22 @@ class Transaction extends Component {
 
                                                     <a href="#" class="recent-job-item highlight clearfix">
                                                         <div class="GridLex-grid-middle">
-                                                            <div class="GridLex-col-6_sm-12_xs-12">
+                                                            <div class="GridLex-col-10_sm-12_xs-12">
                                                                 <div class="job-position">
                                                                     <div class="image">
-                                                                        <img src="images/brands/06.png" alt="image" />
+                                                                        <img src="assets/images/menu.png" alt="image" />
                                                                     </div>
                                                                     <div class="content">
-                                                                        <h4>IT Web Developer</h4>
-                                                                        <p>Expedia</p>
+                                                                        <h4>Jollof Rice - 	&#x20A6; 1200</h4>
+                                                                        <p>SecureID is certified by MasterCard Incorporated, Verve, Visa International, </p>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="GridLex-col-4_sm-8-xs-8_xss-12 mt-10-xss">
-                                                                <div class="job-location">
-                                                                    <i class="fa fa-map-marker text-primary"></i>
-                                                                    Guildford, Surrey
-                                                                </div>
-                                                            </div>
+                                                         
                                                             <div class="GridLex-col-2_sm-4_xs-4_xss-12">
                                                                 <div class="job-label label label-success">
-                                                                    Freelance
+                                                                    Order
                                                                 </div>
-                                                                <span class="font12 block spacing1 font400 text-center">1
-                                                                    day ago</span>
                                                             </div>
                                                         </div>
                                                     </a>

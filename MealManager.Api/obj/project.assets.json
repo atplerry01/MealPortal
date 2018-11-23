@@ -11563,11 +11563,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\development\\WSS\\MealPortal\\MealManager.Api\\MealManager.Api.csproj",
+      "projectUniqueName": "C:\\development\\WSS\\MealPortalSolution\\MealPortalV1\\MealManager.Api\\MealManager.Api.csproj",
       "projectName": "MealManager.Api",
-      "projectPath": "C:\\development\\WSS\\MealPortal\\MealManager.Api\\MealManager.Api.csproj",
+      "projectPath": "C:\\development\\WSS\\MealPortalSolution\\MealPortalV1\\MealManager.Api\\MealManager.Api.csproj",
       "packagesPath": "C:\\Users\\olanrewaju.akinsanya\\.nuget\\packages\\",
-      "outputPath": "C:\\development\\WSS\\MealPortal\\MealManager.Api\\obj\\",
+      "outputPath": "C:\\development\\WSS\\MealPortalSolution\\MealPortalV1\\MealManager.Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
