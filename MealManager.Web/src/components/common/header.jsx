@@ -12,7 +12,7 @@ class Header extends Component {
             username: '',
             password: '',
             confirmPassword: '',
-            email:'',
+            email: '',
             authenticated: false,
             registering: false,
             errors: [],
@@ -21,7 +21,17 @@ class Header extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        
+        this.handleLogout = this.handleLogout.bind(this);
+
+    }
+
+    componentDidMount() {
+        const ls = localStorage.getItem("wss.auth");
+        const jwtToken = JSON.parse(ls);
+
+        if (jwtToken) {
+            this.setState({ authenticated: true });
+        }
     }
 
     handleChange(e) {
@@ -39,15 +49,31 @@ class Header extends Component {
         }
 
         if (modelData.username && modelData.password) {
-            console.log(modelData);
             this.postLogin(modelData);
+        } else {
+            this.setState({ error: 'Invalid username/ Password' });
         }
+    }
+
+    handleLogout(e) {
+        localStorage.removeItem("wss.auth");
+        this.setState({ authenticated: false});
+        this.props.history.push("/");
     }
 
     render() {
 
-        const { username, password } = this.state;
-        
+        const { username, password, confirmPassword, email, authenticated, errors } = this.state;
+        const errorLists = () => {
+            if (errors && errors.length !== 0) {
+                return errors.map((error, index) => {
+                    return (
+                        <li style={{ color: 'red' }} key={index + 1}>{error.description}</li>
+                    )
+                })
+            }
+        }
+
         return (
 
             <header id="header">
@@ -58,47 +84,73 @@ class Header extends Component {
 
                         <div className="logo-wrapper">
                             <div className="logo">
-                                <NavLink to="/"><img src="assets/images/logo.png" alt="Logo" /></NavLink>
+                                <NavLink to="/" style={{ color: '#fff', fontSize: 22, paddingTop: 15 }}>
+                                    {/* <img src="assets/images/logo.png" alt="Logo" /> */}
+                                    <span >NexaPos</span>
+                                </NavLink>
                             </div>
                         </div>
 
                         <div id="navbar" className="navbar-nav-wrapper navbar-arrow">
 
-                            <ul className="nav navbar-nav" id="responsive-menu">
+                            {authenticated &&
 
-                                <li>
-                                    <NavLink to="/dashboard">Home</NavLink>
+                                <ul className="nav navbar-nav" id="responsive-menu">
 
-                                </li>
+                                    <li>
+                                        <NavLink to="/dashboard">Home</NavLink>
+                                    </li>
 
-                                <li>
-                                    <NavLink to="/transactions">Meal Transactions</NavLink>
+                                    <li>
+                                        <NavLink to="/transactions">Meal Transactions</NavLink>
+                                    </li>
 
-                                </li>
+                                    <li>
+                                        <NavLink to="/accounts">Accounts</NavLink>
+                                    </li>
 
-                                <li>
-                                    <NavLink to="/accounts">Accounts</NavLink>
+                                    <li>
+                                        <NavLink to="/extra/departments">Extra</NavLink>
+                                    </li>
+                                </ul>
+                            }
 
-                                </li>
+                            {!authenticated &&
+                                <ul className="nav navbar-nav" id="responsive-menu"> 
+                                    <li>
+                                        <NavLink to="/dashboard"></NavLink>
+                                    </li>
+                                    
+                                    <li>
+                                        <NavLink to="/transactions"></NavLink>
+                                    </li>
 
-                                <li>
-                                    <NavLink to="/extra/departments">Extra</NavLink>
+                                    <li>
+                                        <NavLink to="/accounts"></NavLink>
+                                    </li>
 
-                                </li>
+                                    <li>
+                                        <NavLink to="/extra/departments"></NavLink>
+                                    </li>
+                                </ul>
+                            }
 
-                                <li>
-                                    <NavLink to="#">Logout</NavLink>
-
-                                </li>
-
-                            </ul>
 
                         </div>
+
                         <div className="nav-mini-wrapper">
-                            <ul className="nav-mini sign-in">
-                                <li><a data-toggle="modal" href="#loginModal">login</a></li>
-                                <li><a data-toggle="modal" href="#registerModal">register</a></li>
-                            </ul>
+                            {authenticated && (
+                                <ul className="nav-mini sign-in">
+                                    <li>
+                                        <button onClick={this.handleLogout} type="button" className="btn btn-primary">Logout</button></li>
+                                </ul>
+                            )}
+                            {!authenticated && (
+                                <ul className="nav-mini sign-in">
+                                    <li><a id="showLogin" data-toggle="modal" href="#loginModal">login</a></li>
+                                    <li><a data-toggle="modal" href="#registerModal">register</a></li>
+                                </ul>
+                            )}
                         </div>
 
                     </div>
@@ -117,21 +169,7 @@ class Header extends Component {
                     <div className="modal-body">
                         <div className="row gap-20">
 
-{/*
-                            <div className="col-sm-6 col-md-6">
-                                <button className="btn btn-facebook btn-block mb-5-xs">Log-in with Facebook</button>
-                            </div>
-                            <div className="col-sm-6 col-md-6">
-                                <button className="btn btn-google-plus btn-block">Log-in with Google+</button>
-                            </div>
-
-                            <div className="col-md-12">
-                                <div className="login-modal-or">
-                                    <div><span>or</span></div>
-                                </div>
-                            </div>
-
-*/}
+                            <div style={{color: 'red'}}>{this.state.error}</div>
                             <div className="col-sm-12 col-md-12">
 
                                 <div className="form-group">
@@ -323,15 +361,22 @@ class Header extends Component {
         return axios.post(myConfig.apiUrl + "/api/token", data, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" }
         }).then(response => {
+
             
             localStorage.setItem("wss.auth", JSON.stringify(response.data));
-            this.setState({authenticated: true});
+            this.setState({ authenticated: true });
             document.getElementById("hideLoginPageModal").click();
-            console.log(this.props);
             this.props.history.push("/transactions");
+
+            // if (response.data.isAdmin) {
+            //     this.props.history.push("/admin");
+            // } else {
+            //     this.props.history.push("/dashboard");
+            // }
 
         }).catch(error => {
             // this.setState({errors: error.response.data.errors});
+            console.log(error.response.data.errors);
             const errors = {};
             errors.message = "Invalid username/ Password";
             this.setState({ error: 'Invalid username/ Password' });

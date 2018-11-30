@@ -12,7 +12,7 @@ const Footer = () => (
 
           <div className="col-sm-4 col-md-4">
 
-            <p className="copy-right">&#169; Copyright 2016 HaNgan</p>
+            <p className="copy-right">&#169; Copyright 2018 NexaPos</p>
 
           </div>
 

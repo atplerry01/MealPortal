@@ -22,8 +22,8 @@ class Home extends Component {
             <div className="hero">
               <div className="container">
 
-                <h1>your future starts here now</h1>
-                <p>Finding your next job or career more 1000+ availabilities</p>
+                <h1>Your meal start here...</h1>
+                <p>Finding your next meal is increadible</p>
 
                 <div className="main-search-form-wrapper">
 
@@ -33,11 +33,7 @@ class Home extends Component {
                       <div className="row gap-0">
 
                         <div className="col-xss-6 col-xs-6 col-sm-6">
-                          <input className="form-control" placeholder="Looking for job" />
-                        </div>
-
-                        <div className="col-xss-6 col-xs-6 col-sm-6">
-                          <input className="form-control" placeholder="Place to work" />
+                          <input className="form-control" placeholder="Looking for the menu" />
                         </div>
 
                       </div>

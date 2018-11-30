@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MealManager.Api.Models.Transact;
@@ -23,18 +25,24 @@ namespace MealManager.Api.Controllers
         [HttpGet]
         public async Task<IEnumerable<MealTransactionModel>> GetDepartments()
         {
-            var entity = await context.MealTransactions.ToListAsync();
+            var entity = await context.MealTransactions
+                .Include(u => u.User)
+                .Include(m => m.Menu)
+                .ToListAsync();
             return mapper.Map<IEnumerable<MealTransaction>, IEnumerable<MealTransactionModel>>(entity);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateDepartment([FromBody] MealTransactionSaveModel model)
+        [HttpPost("menu")]
+        public async Task<IActionResult> CreateMealTransaction([FromBody] MealTransactionSaveModel model)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            MealTransaction existingModel = await context.MealTransactions.FirstOrDefaultAsync(u => u.UserId == model.UserId);
+            DateTime start = DateTime.Now.Date;
+            DateTime end = DateTime.Now;
 
-            // MealTransaction: Use Meal
+            MealTransaction existingModel = await context.MealTransactions
+                .FirstOrDefaultAsync(u => u.UserId == model.UserId && (u.CreatedOn >= start && u.CreatedOn <= end));
+
             if (existingModel != null)
             {
                 return StatusCode(400, "Transaction already exist");
@@ -44,11 +52,85 @@ namespace MealManager.Api.Controllers
             context.MealTransactions.Add(entity);
             await context.SaveChangesAsync();
 
-            entity = await context.MealTransactions.SingleOrDefaultAsync(it => it.Id == entity.Id);
+            entity = await context.MealTransactions
+                .Include(u => u.User)
+                .Include(m => m.Menu)
+                .SingleOrDefaultAsync(it => it.Id == entity.Id);
             var result = mapper.Map<MealTransaction, MealTransactionModel>(entity);
             return Ok(result);
+
         }
 
-        
+
+        [HttpGet("today")]
+        public async Task<IEnumerable<MealTransactionModel>> ThisDay()
+        {
+            DateTime start = DateTime.Now.Date;
+            DateTime end = DateTime.Now;
+
+            var entity = await context.MealTransactions
+                .Include(u => u.User)
+                .Include(m => m.Menu)
+                .Where(u => u.CreatedOn >= start && u.CreatedOn <= end).ToListAsync();
+            return mapper.Map<IEnumerable<MealTransaction>, IEnumerable<MealTransactionModel>>(entity);
+        }
+
+        [HttpGet("thisMonth")]
+        public async Task<IEnumerable<MealTransactionModel>> Thismonth()
+        {
+            DateTime start = DateTime.Now.Date;
+            DateTime end = DateTime.Now;
+
+            int first, last = new int();
+            int month, year = new int();
+            
+            month = DateTime.Now.Month;
+            year = DateTime.Now.Year;
+
+            first = 1;
+            last = DateTime.DaysInMonth(year, month);
+
+            var raw1 = year + "-" + month + "-" + first + " 00:00:00.000";
+            var raw2 = year + "-" + month + "-" + last + " 23:59:59.599";
+
+            start = DateTime.Parse(raw1 );
+            end = DateTime.Parse(raw2);
+
+            var entity = await context.MealTransactions
+                .Include(u => u.User)
+                .Include(m => m.Menu)
+                .Where(u => u.CreatedOn >= start && u.CreatedOn <= end).ToListAsync();
+            return mapper.Map<IEnumerable<MealTransaction>, IEnumerable<MealTransactionModel>>(entity);
+        }
+
+        [HttpGet("lastMonth")]
+        public async Task<IEnumerable<MealTransactionModel>> Lastmonth()
+        {
+            DateTime start = DateTime.Now.Date;
+            DateTime end = DateTime.Now;
+
+            int first, last = new int();
+            int month, year = new int();
+            
+            month = DateTime.Now.Month - 1;
+            year = DateTime.Now.Year;
+
+            first = 1;
+            last = DateTime.DaysInMonth(year, month) - 1;
+
+            var raw1 = year + "-" + month + "-" + first + " 00:00:00.000";
+            var raw2 = year + "-" + month + "-" + last + " 23:59:59.599";
+
+            start = DateTime.Parse(raw1 );
+            end = DateTime.Parse(raw2);
+
+            var entity = await context.MealTransactions
+                .Include(u => u.User)
+                .Include(m => m.Menu)
+                .Where(u => u.CreatedOn >= start && u.CreatedOn <= end).ToListAsync();
+            return mapper.Map<IEnumerable<MealTransaction>, IEnumerable<MealTransactionModel>>(entity);
+        }
+
+
     }
 }

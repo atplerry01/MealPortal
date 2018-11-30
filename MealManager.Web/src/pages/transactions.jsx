@@ -8,61 +8,81 @@ import SideBar from "../components/common/sidebar";
 import SelectInput from "../components/common/SelectInput";
 import { lookupUserDropDown } from "../_selector/user-selectors";
 import { myConfig } from "../app/config";
+import MenuList from "../components/extra/MenuList";
+import MealTransactionTable from "../components/extra/MealTransactionTable";
 
 class Transaction extends Component {
     constructor(props, context) {
         super(props, context);
 
         this.state = {
+            selectedUserId: '',
             userId: '',
             users: [],
             menus: []
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleOrder = this.handleOrder.bind(this);
     }
 
     componentDidMount() {
         this.getUsers();
         this.getMenus();
+        this.getTransactionMenus();
     }
-    
 
-	handleChange(e) {
-		const { name, value } = e.target;
-		this.setState({ [name]: value });
-	}
+    handleOrder(entity) {
+        var menuEntity = {
+            selectedUserId: this.state.selectedUserId,
+            menuId: entity.id
+        };
+
+        console.log(menuEntity);
+        console.log(entity);
+
+        this.postMenu(entity);
+    }
+
+    handleChange(e) {
+        const { name, value } = e.target;
+        this.setState({ [name]: value });
+
+        if (name === 'userId') {
+            this.setState({selectedUserId: value});
+        }
+
+    }
 
     onHandleClick(e) {
         e.preventDefault();
-
         const { userId } = this.state;
 
+        console.log(this.state);
         console.log(userId);
     }
 
     render() {
 
-        const { userId, users } = this.state;
+        const { userId, users, menus } = this.state;
         const formatedUsers = lookupUserDropDown(users);
 
-        console.log(formatedUsers);
-
         const dropUsers = () => {
-			if (formatedUsers) {
-				return (
-					<SelectInput
-						name="userId"
-						label=""
-						value={userId}
-						onChange={this.handleChange}
-						defaultOption="Select User"
-						options={formatedUsers}
-					/>
-				);
-			}
+            if (formatedUsers) {
+                return (
+                    <SelectInput
+                        name="userId"
+                        label=""
+                        value={userId}
+                        onChange={this.handleChange}
+                        defaultOption="Select User"
+                        options={formatedUsers}
+                    />
+                );
+            }
         };
-        
+
+
         return (
             <div className="section sm">
 
@@ -98,83 +118,34 @@ class Transaction extends Component {
                                         <div role="tabpanel" className="tab-pane fade in active" id="relatedJob1">
                                             <div className="tab-content-inner">
 
-                                                <div>{dropUsers()}</div>
+                                                <div style={{padding: '10px 0 10px'}}>
+                                                    {dropUsers()}
+                                                </div>
 
                                                 <div className="recent-job-wrapper mt-30">
+
+                                                    <div className="col-sm-8 col-md-8">
+                                                        
+                                                    </div>
                                                     
-                                                    <a className="recent-job-item highlight clearfix">
-                                                        <div className="GridLex-grid-middle">
-                                                            <div className="GridLex-col-10_sm-12_xs-12">
-                                                                <div className="job-position">
-                                                                    <div className="image">
-                                                                        <img src="assets/images/menu.png" alt="image" />
-                                                                    </div>
-                                                                    <div className="content">
-                                                                        <h4>Jollof Rice - 	&#x20A6;1200</h4>
-                                                                        <p>SecureID is certified by MasterCard Incorporated, Verve, Visa International, </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                         
-                                                            <div className="GridLex-col-2_sm-4_xs-4_xss-12">
-                                                               
-                                                                <button type="button" onClick={(e) => this.onHandleClick(e)} className="job-label label label-success" aria-hidden="true">Order</button>
-
-                                                            </div>
-                                                        </div>
-                                                    </a>
-
-                                                    <a className="recent-job-item highlight clearfix">
-                                                        <div className="GridLex-grid-middle">
-                                                            <div className="GridLex-col-10_sm-12_xs-12">
-                                                                <div className="job-position">
-                                                                    <div className="image">
-                                                                        <img src="assets/images/menu.png" alt="image" />
-                                                                    </div>
-                                                                    <div className="content">
-                                                                        <h4>Jollof Rice - 	&#x20A6;1200</h4>
-                                                                        <p>SecureID is certified by MasterCard Incorporated, Verve, Visa International, </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                         
-                                                            <div className="GridLex-col-2_sm-4_xs-4_xss-12">
-                                                                <div className="job-label label label-success">
-                                                                    Order
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-
-                                                    <a className="recent-job-item highlight clearfix">
-                                                        <div className="GridLex-grid-middle">
-                                                            <div className="GridLex-col-10_sm-12_xs-12">
-                                                                <div className="job-position">
-                                                                    <div className="image">
-                                                                        <img src="assets/images/menu.png" alt="image" />
-                                                                    </div>
-                                                                    <div className="content">
-                                                                        <h4>Jollof Rice - 	&#x20A6;1200</h4>
-                                                                        <p>SecureID is certified by MasterCard Incorporated, Verve, Visa International, </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                         
-                                                            <div className="GridLex-col-2_sm-4_xs-4_xss-12">
-                                                                <div className="job-label label label-success">
-                                                                    Order
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </a>
+                                                    <MenuList menus={menus} handleOrder = {this.handleOrder}></MenuList>
 
                                                 </div>
 
                                             </div>
                                         </div>
-                                        <div role="tabpanel" className="tab-pane fade" id="relatedJob2">
-                                            <div className="tab-content-inner">
 
+                                        <div role="tabpanel" className="tab-pane fade" id="relatedJob2">
+
+                                            <div>
+
+                                                Meal Transaction
+
+                                                <MealTransactionTable />
+                                            </div>
+
+                                            <div className="tab-content-inner">
+                                            
                                                 <div className="recent-job-wrapper mt-30">
 
                                                     <a href="#" className="recent-job-item highlight clearfix">
@@ -205,8 +176,6 @@ class Transaction extends Component {
                                                             </div>
                                                         </div>
                                                     </a>
-
-
                                                 </div>
 
                                             </div>
@@ -223,29 +192,111 @@ class Transaction extends Component {
 
                 </div>
 
+                <div id="menuModal" className="modal fade login-box-wrapper" tabIndex="-1" data-width="550" style={{ display: "none" }} data-backdrop="static" data-keyboard="false" data-replace="true">
+
+                    <div className="modal-header">
+                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 className="modal-title text-center">Sign-in into your account</h4>
+                    </div>
+
+                    <div className="modal-body">
+                        <div className="row gap-20">
+
+                            <div style={{ color: 'red' }}>{this.state.error}</div>
+                            <div className="col-sm-12 col-md-12">
+
+                                <div className="form-group">
+                                    <label>Username</label>
+                                    <input name="username"  onChange={this.handleChange} className="form-control" placeholder="" type="text" />
+                                </div>
+
+                            </div>
+
+                            <div className="col-sm-12 col-md-12">
+
+                                <div className="form-group">
+                                    <label>Password</label>
+                                    <input name="password" onChange={this.handleChange} className="form-control" placeholder="" type="password" />
+                                </div>
+
+                            </div>
+
+                            <div className="col-sm-6 col-md-6">
+                                <div className="checkbox-block">
+                                    <input id="remember_me_checkbox" name="remember_me_checkbox" className="checkbox" value="First Choice" type="checkbox" />
+                                    <label className="" htmlFor="remember_me_checkbox">Remember me</label>
+                                </div>
+                            </div>
+
+                            <div className="col-sm-6 col-md-6">
+                                <div className="login-box-link-action">
+                                    <a data-toggle="modal" href="#forgotPasswordModal">Forgot password?</a>
+                                </div>
+                            </div>
+
+                            <div className="col-sm-12 col-md-12">
+                                <div className="login-box-box-action">
+                                    No account? <a data-toggle="modal" href="#registerModal">Register</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div className="modal-footer text-center">
+                        <button type="button" onClick={this.handleSubmit} className="btn btn-primary">Log-in</button>
+                        <button type="button" id="hideLoginPageModal" data-dismiss="modal" className="btn btn-primary btn-inverse">Close</button>
+                    </div>
+
+                </div>
+
             </div>
-        
+
         );
     }
 
     // Get all users
-    getUsers() { 
-        axios.get(myConfig.apiUrl + "/api/accounts/user/profiles")
-            .then(response => {
-                toastr.success("Change Successful.", "Password Change");
-                this.setState({ users: response.data }); 
-            }) 
+
+    postMenu(model) {
+        return axios.post(myConfig.apiUrl + "/api/lookups/departments", model).then(response => {
+            console.log(response.data);
+            //document.getElementById("hideDepartmentModal").click();
+            this.getDepartments();
+        })
     }
 
-    getMenus() { 
+    
+    postDepartment(model) {
+        return axios.post(myConfig.apiUrl + "/api/lookups/departments", model).then(response => {
+            document.getElementById("hideDepartmentModal").click();
+            this.getDepartments();
+        })
+    }
+    
+    getUsers() {
+        axios.get(myConfig.apiUrl + "/api/accounts/user/profiles")
+            .then(response => {
+                console.log(response.data);
+                this.setState({ users: response.data });
+            })
+    }
+
+    getMenus() {
         axios.get(myConfig.apiUrl + "/api/lookups/menus")
             .then(response => {
                 toastr.success("Change Successful.", "Password Change");
-                this.setState({ menus: response.data }); 
-            }) 
+                this.setState({ menus: response.data });
+            })
     }
 
-    // MealMenu
+    getTransactionMenus() {
+        axios.get(myConfig.apiUrl + "/api/transactions/today")
+            .then(response => {
+                console.log(response);
+                ///toastr.success("Change Successful.", "Password Change");
+                this.setState({ menustransactions: response.data });
+            })
+    }
 
 }
 

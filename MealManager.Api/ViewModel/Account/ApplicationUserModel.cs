@@ -2,6 +2,7 @@ namespace MealManager.Api.ViewModel.Account
 {
     public class ApplicationUserModel
     {
+        public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool IsEnabled { get; set; }
