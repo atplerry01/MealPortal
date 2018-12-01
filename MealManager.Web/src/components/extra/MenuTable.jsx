@@ -4,9 +4,7 @@ import moment from 'moment';
 
 class MenuTable extends Component {
 
-    render() {
-        console.log(this.props);
-        
+    render() {        
         const list = () => {
 
             if (this.props.menus) {

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import toastr from "toastr";
+import moment from 'moment';
 
 import SideBar from "../components/common/sidebar";
 
@@ -17,6 +18,7 @@ class Transaction extends Component {
 
         this.state = {
             selectedUserId: '',
+            selectedTransaction: '',
             userId: '',
             users: [],
             menus: []
@@ -34,14 +36,15 @@ class Transaction extends Component {
 
     handleOrder(entity) {
         var menuEntity = {
-            selectedUserId: this.state.selectedUserId,
+            userId: this.state.selectedUserId,
             menuId: entity.id
         };
 
-        console.log(menuEntity);
-        console.log(entity);
-
-        this.postMenu(entity);
+        if (menuEntity.userId) {
+            this.postMenu(menuEntity);
+        } else {
+            toastr.error("Error in User Selection.", "Transaction Error");
+        }
     }
 
     handleChange(e) {
@@ -57,14 +60,15 @@ class Transaction extends Component {
     onHandleClick(e) {
         e.preventDefault();
         const { userId } = this.state;
+    }
 
-        console.log(this.state);
-        console.log(userId);
+    onTodayTransaction() {
+        this.getThisMonthTransactionMenus();
     }
 
     render() {
 
-        const { userId, users, menus } = this.state;
+        const { userId, users, menus, menuTransactions, selectedTransaction } = this.state;
         const formatedUsers = lookupUserDropDown(users);
 
         const dropUsers = () => {
@@ -81,7 +85,6 @@ class Transaction extends Component {
                 );
             }
         };
-
 
         return (
             <div className="section sm">
@@ -137,12 +140,14 @@ class Transaction extends Component {
 
                                         <div role="tabpanel" className="tab-pane fade" id="relatedJob2">
 
-                                            <div>
-
-                                                Meal Transaction
-
-                                                <MealTransactionTable />
+                                            <div style= {{padding: '10px 0 10px'}}>
+                                                <a style={{marginRight: '10px'}} onClick={this.getTransactionMenus.bind(this)}>Today</a>
+                                                <a style={{marginRight: '10px'}} onClick={this.getThisMonthTransactionMenus.bind(this)}>This Month</a>
+                                                <a onClick={this.getLastMonthTransactionMenus.bind(this)}>Last Month</a>
                                             </div>
+
+                                            <div><MealTransactionTable menuTransactions = {menuTransactions} /></div>
+
 
                                             <div className="tab-content-inner">
                                             
@@ -256,27 +261,33 @@ class Transaction extends Component {
     }
 
     // Get all users
-
     postMenu(model) {
-        return axios.post(myConfig.apiUrl + "/api/lookups/departments", model).then(response => {
-            console.log(response.data);
-            //document.getElementById("hideDepartmentModal").click();
-            this.getDepartments();
+        return axios.post(myConfig.apiUrl + "/api/transactions/menu", model).then(response => {
+            this.getTransactionMenus();
+            console.log(response);
+            toastr.success('Menu Transaction Successful', "Meal Post");
         })
+        .catch(function (error) { 
+            console.log(error);
+            const response = error.response
+            console.log(response);
+            if (response) {
+                toastr.error(response.data, "Post Failed.");
+            }
+        });
     }
 
     
-    postDepartment(model) {
-        return axios.post(myConfig.apiUrl + "/api/lookups/departments", model).then(response => {
-            document.getElementById("hideDepartmentModal").click();
-            this.getDepartments();
-        })
-    }
+    // postDepartment(model) {
+    //     return axios.post(myConfig.apiUrl + "/api/lookups/departments", model).then(response => {
+    //         document.getElementById("hideDepartmentModal").click();
+    //         this.getDepartments();
+    //     })
+    // }
     
     getUsers() {
         axios.get(myConfig.apiUrl + "/api/accounts/user/profiles")
             .then(response => {
-                console.log(response.data);
                 this.setState({ users: response.data });
             })
     }
@@ -284,7 +295,7 @@ class Transaction extends Component {
     getMenus() {
         axios.get(myConfig.apiUrl + "/api/lookups/menus")
             .then(response => {
-                toastr.success("Change Successful.", "Password Change");
+                //toastr.success("Change Successful.", "Password Change");
                 this.setState({ menus: response.data });
             })
     }
@@ -292,11 +303,27 @@ class Transaction extends Component {
     getTransactionMenus() {
         axios.get(myConfig.apiUrl + "/api/transactions/today")
             .then(response => {
-                console.log(response);
                 ///toastr.success("Change Successful.", "Password Change");
-                this.setState({ menustransactions: response.data });
+                this.setState({ menuTransactions: response.data });
             })
     }
+
+    getThisMonthTransactionMenus() {
+        axios.get(myConfig.apiUrl + "/api/transactions/thisMonth")
+            .then(response => {
+                ///toastr.success("Change Successful.", "Password Change");
+                this.setState({ menuTransactions: response.data });
+            })
+    }
+
+    getLastMonthTransactionMenus() {
+        axios.get(myConfig.apiUrl + "/api/transactions/lastMonth")
+            .then(response => {
+                ///toastr.success("Change Successful.", "Password Change");
+                this.setState({ menuTransactions: response.data });
+            })
+    }
+
 
 }
 

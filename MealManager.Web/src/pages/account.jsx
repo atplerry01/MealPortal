@@ -126,12 +126,12 @@ class Account extends Component {
 
                                 <div className="form-group">
                                     <label>First Name</label>
-                                    <input name="name" value={firstName} onChange={this.handleChange} className="form-control" placeholder="" type="text" />
+                                    <input name="firstName" value={firstName} onChange={this.handleChange} className="form-control" placeholder="" type="text" />
                                 </div>
 
                                 <div className="form-group">
                                     <label>Last Name</label>
-                                    <input name="price" value={lastName} onChange={this.handleChange} className="form-control" placeholder="" type="text" />
+                                    <input name="lastName" value={lastName} onChange={this.handleChange} className="form-control" placeholder="" type="text" />
                                 </div>
 
                                 <div className="form-group">

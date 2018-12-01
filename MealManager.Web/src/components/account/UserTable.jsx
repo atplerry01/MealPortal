@@ -5,10 +5,7 @@ import moment from 'moment';
 class UserTable extends Component {
 
     render() {
-        const list = () => {
-
-            console.log(this.props.users);
-            
+        const list = () => {            
             if (this.props.users) {
                 return this.props.users.map((entity, index) => {
 

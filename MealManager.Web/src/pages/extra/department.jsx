@@ -49,9 +49,6 @@ class Department extends Component {
         e.preventDefault();
 
         const { departmentId, mealEntitled } = this.state;
-
-        console.log(this.state);
-
         var modelData = {
             departmentId,
             mealAssignmentId: mealEntitled
@@ -62,7 +59,6 @@ class Department extends Component {
                 //toastr.success("Save Successful.", "Assignment Creation");
                 this.getDepartmentProfiles();
                 document.getElementById("hideProfilingModal").click();
-                console.log(response.data);
             })
         }
 
@@ -242,7 +238,6 @@ class Department extends Component {
         axios
             .get(myConfig.apiUrl + "/api/lookups/department/profiling")
             .then(response => {
-                console.log(response.data);
                 this.setState({ departmentProfiles: response.data });
             })
             .catch(function (error) { });
@@ -252,7 +247,6 @@ class Department extends Component {
         axios
             .get(myConfig.apiUrl + "/api/lookups/entitlements")
             .then(response => {
-                console.log(response.data);
                 this.setState({ mealassignments: response.data });
             })
             .catch(function (error) { });

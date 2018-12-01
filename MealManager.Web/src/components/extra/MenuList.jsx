@@ -11,6 +11,8 @@ class MenuList extends Component {
 
     render() {
 
+        console.log(this.props);
+
         const list = () => {
             if (this.props.menus) {
                 return this.props.menus.map((entity, index) => {
@@ -23,8 +25,8 @@ class MenuList extends Component {
                                             <img src="assets/images/menu.png" alt="image" />
                                         </div>
                                         <div className="content">
-                                            <h4>Jollof Rice - 	&#x20A6;1200</h4>
-                                            <p>SecureID is certified by MasterCard Incorporated, Verve, Visa International, </p>
+                                            <h4>{entity.name} - 	&#x20A6;{entity.price}</h4>
+                                            <p>{entity.description}</p>
                                         </div>
                                     </div>
                                 </div>

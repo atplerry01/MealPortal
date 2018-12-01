@@ -97,9 +97,11 @@ class Header extends Component {
 
                                 <ul className="nav navbar-nav" id="responsive-menu">
 
+                                    {/* 
                                     <li>
                                         <NavLink to="/dashboard">Home</NavLink>
                                     </li>
+                                    */}
 
                                     <li>
                                         <NavLink to="/transactions">Meal Transactions</NavLink>
@@ -368,15 +370,8 @@ class Header extends Component {
             document.getElementById("hideLoginPageModal").click();
             this.props.history.push("/transactions");
 
-            // if (response.data.isAdmin) {
-            //     this.props.history.push("/admin");
-            // } else {
-            //     this.props.history.push("/dashboard");
-            // }
-
         }).catch(error => {
             // this.setState({errors: error.response.data.errors});
-            console.log(error.response.data.errors);
             const errors = {};
             errors.message = "Invalid username/ Password";
             this.setState({ error: 'Invalid username/ Password' });

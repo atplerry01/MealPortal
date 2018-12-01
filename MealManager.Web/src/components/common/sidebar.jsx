@@ -11,23 +11,11 @@ const SideBar = () => (
         <li>
             <h4 className="heading">Extra:</h4>
             <ul>
-                <li><NavLink to="/extra/departments">Department</NavLink></li>
+                <li style={{paddingTop: '15px'}}><NavLink to="/extra/departments">Department</NavLink></li>
                 <li><NavLink to="/extra/menus">Menus</NavLink></li>
             </ul>
-            
         </li>
-        <li>
-            <h4 className="heading">Rate/Salary:</h4>
-            Negotiable
-        </li>
-        <li>
-            <h4 className="heading">Expert:</h4>
-            Expert
-        </li>
-        <li>
-            <h4 className="heading">Posted:</h4>
-            32 minutes ago
-        </li>
+       
     </ul>
 
 </div>

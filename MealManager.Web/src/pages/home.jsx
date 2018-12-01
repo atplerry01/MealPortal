@@ -10,10 +10,6 @@ class Home extends Component {
         };
     }
 
-    componentDidMount() {
-        console.log("content");
-    }
-
     render() {
       
         return (

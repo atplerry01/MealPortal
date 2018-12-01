@@ -68,6 +68,19 @@ namespace MealManager.Api.Controllers
             DateTime start = DateTime.Now.Date;
             DateTime end = DateTime.Now;
 
+            int first, last = new int();
+            int month, year, day = new int();
+
+            day = DateTime.Now.Day;
+            month = DateTime.Now.Month;
+            year = DateTime.Now.Year;
+
+            var raw1 = year + "-" + month + "-" + day + " 00:00:00.000";
+            var raw2 = year + "-" + month + "-" + day + " 23:59:59.599";
+
+            start = DateTime.Parse(raw1);
+            end = DateTime.Parse(raw2);
+
             var entity = await context.MealTransactions
                 .Include(u => u.User)
                 .Include(m => m.Menu)
@@ -116,7 +129,7 @@ namespace MealManager.Api.Controllers
             year = DateTime.Now.Year;
 
             first = 1;
-            last = DateTime.DaysInMonth(year, month) - 1;
+            last = DateTime.DaysInMonth(year, month);
 
             var raw1 = year + "-" + month + "-" + first + " 00:00:00.000";
             var raw2 = year + "-" + month + "-" + last + " 23:59:59.599";

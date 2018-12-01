@@ -5,9 +5,6 @@ import moment from 'moment';
 class EmployeeTable extends Component {
 
     render() {
-        console.log(this.props);
-        console.log(this.props.employees);
-
         const list = () => {
 
             if (this.props.employees) {

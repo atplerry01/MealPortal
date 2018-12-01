@@ -4,9 +4,7 @@ import moment from 'moment';
 
 class DepartmentProfileTable extends Component {
 
-    render() {
-        console.log(this.props);
-        
+    render() {        
         const list = () => {
             if (this.props.departmentProfiles) {
                 return this.props.departmentProfiles.map((entity, index) => {
