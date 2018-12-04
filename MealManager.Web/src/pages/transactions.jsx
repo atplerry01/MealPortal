@@ -140,50 +140,17 @@ class Transaction extends Component {
 
                                         <div role="tabpanel" className="tab-pane fade" id="relatedJob2">
 
-                                            <div style= {{padding: '10px 0 10px'}}>
-                                                <a style={{marginRight: '10px'}} onClick={this.getTransactionMenus.bind(this)}>Today</a>
-                                                <a style={{marginRight: '10px'}} onClick={this.getThisMonthTransactionMenus.bind(this)}>This Month</a>
+                                            <div style={{ padding: '10px 0 10px' }}>
+                                                <a style={{ marginRight: '10px' }} onClick={this.getTransactionMenus.bind(this)}>Today</a>
+                                                <a style={{ marginRight: '10px' }} onClick={this.getThisMonthTransactionMenus.bind(this)}>This Month</a>
                                                 <a onClick={this.getLastMonthTransactionMenus.bind(this)}>Last Month</a>
                                             </div>
 
-                                            <div><MealTransactionTable menuTransactions = {menuTransactions} /></div>
-
-
-                                            <div className="tab-content-inner">
-                                            
-                                                <div className="recent-job-wrapper mt-30">
-
-                                                    <a href="#" className="recent-job-item highlight clearfix">
-                                                        <div className="GridLex-grid-middle">
-                                                            <div className="GridLex-col-6_sm-12_xs-12">
-                                                                <div className="job-position">
-                                                                    <div className="image">
-                                                                        <img src="images/brands/06.png" alt="image" />
-                                                                    </div>
-                                                                    <div className="content">
-                                                                        <h4>IT Web Developer</h4>
-                                                                        <p>Expedia</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="GridLex-col-4_sm-8-xs-8_xss-12 mt-10-xss">
-                                                                <div className="job-location">
-                                                                    <i className="fa fa-map-marker text-primary"></i>
-                                                                    Guildford, Surrey
-                                                                </div>
-                                                            </div>
-                                                            <div className="GridLex-col-2_sm-4_xs-4_xss-12">
-                                                                <div className="job-label label label-success">
-                                                                    Freelance
-                                                                </div>
-                                                                <span className="font12 block spacing1 font400 text-center">1
-                                                                    day ago</span>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-
+                                            <div>
+                                                <br />
+                                                <MealTransactionTable menuTransactions={menuTransactions} />
                                             </div>
+
                                         </div>
                                     </div>
 

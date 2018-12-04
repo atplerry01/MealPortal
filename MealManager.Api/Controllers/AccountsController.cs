@@ -54,6 +54,7 @@ namespace MealManager.Api.Controllers
         }
 
 
+
         [HttpPost("user/create")]
         public async Task<IActionResult> CreateClientUser([FromBody] AccountSaveResource model)
         {
@@ -125,6 +126,36 @@ namespace MealManager.Api.Controllers
 
 
 
+        [HttpPost("operator/create")]
+        public async Task<IActionResult> CreateOperatorUser([FromBody] AccountSaveResource model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = new ApplicationUser()
+            {
+                UserName = model.Username,
+                Email = model.Email,
+                EmailConfirmed = true,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                PhoneNumber = model.PhoneNumber,
+                IsEnabled = true
+            };
+
+            IdentityResult addUserResult = await userManager.CreateAsync(user, model.Password);
+
+            if (!addUserResult.Succeeded)
+            {
+                return StatusCode(400, addUserResult);
+            }
+
+            //var result = mapper.Map<ApplicationUser, AccountSaveResource>(user);
+            return Ok(); //StatusCode(200, result);
+        }
 
     }
 }

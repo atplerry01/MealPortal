@@ -40,14 +40,20 @@ namespace MealManager.Api.Controllers
             DateTime start = DateTime.Now.Date;
             DateTime end = DateTime.Now;
 
-            MealTransaction existingModel = await context.MealTransactions
-                .FirstOrDefaultAsync(u => u.UserId == model.UserId && (u.CreatedOn >= start && u.CreatedOn <= end));
+            // get userMealProfiling
+            var userMealProfile = await context.UserMealProfilings
+                    .Include(u => u.DepartmentMealProfiling)
+                    .ThenInclude(m => m.MealAssignment)
+                    .FirstOrDefaultAsync(d => d.UserId == model.UserId);
 
-            if (existingModel != null)
-            {
+            var mealTrans = await context.MealTransactions
+                    .Where(u => u.UserId == model.UserId && (u.CreatedOn >= start && u.CreatedOn <= end))
+                    .ToListAsync();
+
+            if (mealTrans.Count() >= userMealProfile.DepartmentMealProfiling.MealAssignment.MealEntitled) {
                 return StatusCode(400, "Transaction already exist");
             }
-
+           
             var entity = mapper.Map<MealTransactionSaveModel, MealTransaction>(model);
             context.MealTransactions.Add(entity);
             await context.SaveChangesAsync();
@@ -60,7 +66,6 @@ namespace MealManager.Api.Controllers
             return Ok(result);
 
         }
-
 
         [HttpGet("today")]
         public async Task<IEnumerable<MealTransactionModel>> ThisDay()
@@ -143,7 +148,6 @@ namespace MealManager.Api.Controllers
                 .Where(u => u.CreatedOn >= start && u.CreatedOn <= end).ToListAsync();
             return mapper.Map<IEnumerable<MealTransaction>, IEnumerable<MealTransactionModel>>(entity);
         }
-
 
     }
 }

@@ -73,7 +73,8 @@ namespace MealManager.Api.Persistence
                     SecurityStamp = Guid.NewGuid().ToString(),
                     IsEnabled = true,
                     FirstName = "admin",
-                    LastName = "user"
+                    LastName = "user",
+                    EmailConfirmed = true
                 };
                 var x = await userManager.CreateAsync(u, "Admin1234!");
             }

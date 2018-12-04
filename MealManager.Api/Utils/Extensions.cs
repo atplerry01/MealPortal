@@ -13,6 +13,7 @@ namespace MealManager.Api.Utils
         public const string ManageUserClaim = "manage_user";
         public const string AdminRole = "admin";
         public const string UserRole = "user";
+        public const string OperatorRole = "operator";
 
         public const string RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
 

@@ -15,7 +15,7 @@ class MealTransactionTable extends Component {
                             <td>{entity.user.userName}</td>
                             <td>{entity.menu.name}</td>
                             <td>{entity.menu.price}</td>
-                            <td>{moment(new Date(entity.createdOn)).format("DD-MMM-YYYY")}</td>
+                            <td>{moment(new Date(entity.createdOn)).format("DD-MMM-YYYY LT")}</td>
                         </tr>
                     )
                 });
