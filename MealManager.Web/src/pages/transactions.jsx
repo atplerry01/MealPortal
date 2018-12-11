@@ -140,6 +140,11 @@ class Transaction extends Component {
 
                                         <div role="tabpanel" className="tab-pane fade" id="relatedJob2">
 
+
+                                            <div className="pull-right" style={{paddingTop: 20}}>
+                                                <a href="#">Print this doc</a>
+                                            </div>
+
                                             <div style={{ padding: '10px 0 10px' }}>
                                                 <a style={{ marginRight: '10px' }} onClick={this.getTransactionMenus.bind(this)}>Today</a>
                                                 <a style={{ marginRight: '10px' }} onClick={this.getThisMonthTransactionMenus.bind(this)}>This Month</a>
@@ -231,13 +236,10 @@ class Transaction extends Component {
     postMenu(model) {
         return axios.post(myConfig.apiUrl + "/api/transactions/menu", model).then(response => {
             this.getTransactionMenus();
-            console.log(response);
             toastr.success('Menu Transaction Successful', "Meal Post");
         })
         .catch(function (error) { 
-            console.log(error);
             const response = error.response
-            console.log(response);
             if (response) {
                 toastr.error(response.data, "Post Failed.");
             }

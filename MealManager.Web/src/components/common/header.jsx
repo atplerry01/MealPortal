@@ -22,7 +22,8 @@ class Header extends Component {
             authenticated: false,
             registering: false,
             errors: [],
-            error: ''
+            error: '',
+            isAdmin: false
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -77,7 +78,7 @@ class Header extends Component {
         if (model.username && model.password) {
             this.postRegister(model);
         } else {
-            this.setState({ error: 'Invalid username/ Password' });
+            this.setState({ error: 'Some fields are missing' });
         }
     }
 
@@ -89,7 +90,7 @@ class Header extends Component {
 
     render() {
 
-        const { regUsername, regPassword, regConfirmPassword, regEmail, username, password, confirmPassword, email, authenticated, errors } = this.state;
+        const { regUsername, regPassword, regConfirmPassword, regEmail, username, password, authenticated, errors, isAdmin } = this.state;
         const errorLists = () => {
             if (errors && errors.length !== 0) {
                 return errors.map((error, index) => {
@@ -120,7 +121,6 @@ class Header extends Component {
                         <div id="navbar" className="navbar-nav-wrapper navbar-arrow">
 
                             {authenticated &&
-
                                 <ul className="nav navbar-nav" id="responsive-menu">
 
 
@@ -164,8 +164,7 @@ class Header extends Component {
                         <div className="nav-mini-wrapper">
                             {authenticated && (
                                 <ul className="nav-mini sign-in">
-                                {/* <li><button onClick={this.handleLogout} type="button" className="btn btn-primary">Logout</button></li> */}
-                                    <li><a data-toggle="modal" href="#registerModal">register</a></li>
+                                    {isAdmin && <li><a data-toggle="modal" href="#registerModal">register</a></li>}
                                     <li><a id="showLogin" onClick={this.handleLogout} >logout</a></li>
                                 </ul>
                             )}
@@ -359,16 +358,16 @@ class Header extends Component {
         return axios.post(myConfig.apiUrl + "/api/token", data, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" }
         }).then(response => {  
-            console.log(response);          
             localStorage.setItem("wss.auth", JSON.stringify(response.data));
             this.setState({ authenticated: true });
+            
+            if (response.data.isAdmin) {
+                this.setState({ isAdmin: true });
+            }
             document.getElementById("hideLoginPageModal").click();
 
-            if (response.data.isAdmin) {
-                this.props.history.push("/transactions");
-            } else {
-                this.props.history.push("/transactions");
-            }
+            this.props.history.push("/transactions");
+
         }).catch(error => {
             // this.setState({errors: error.response.data.errors});
             const errors = {};
@@ -380,7 +379,6 @@ class Header extends Component {
     postRegister = (model) => {
         return axios.post(myConfig.apiUrl + "/api/accounts/operator/create", model).then(response => {
             //this.getTransactionMenus();
-            console.log(response);
             toastr.success('Account Creation Successful', "Account Creation");
             this.setState({
                 regConfirmPassword: '',
@@ -391,9 +389,7 @@ class Header extends Component {
             document.getElementById("hideRegisterPageModal").click();
         })
         .catch(function (error) { 
-            console.log(error);
             const response = error.response
-            console.log(response);
             if (response) {
                 toastr.error(response.data, "Post Failed.");
             }

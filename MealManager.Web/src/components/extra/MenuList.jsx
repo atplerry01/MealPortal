@@ -10,9 +10,6 @@ class MenuList extends Component {
     };
 
     render() {
-
-        console.log(this.props);
-
         const list = () => {
             if (this.props.menus) {
                 return this.props.menus.map((entity, index) => {
