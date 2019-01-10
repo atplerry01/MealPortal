@@ -9,12 +9,12 @@ class MealTransactionTable extends Component {
                 return this.props.menuTransactions.map((entity, index) => {
                     return (
                         <tr key={entity.id}>
-                            <td><a href={entity.id} target="_blank">{index + 1}</a></td>
-                            <td><NavLink to={'/issue/' + entity.id}>{entity.user.lastName} {entity.user.firstName}</NavLink></td>
+                            <td>{index + 1}</td>
+                            <td>{entity.user.lastName} {entity.user.firstName}</td>
                             <td>{entity.user.email}</td>
                             <td>{entity.user.userName}</td>
-                            <td>{entity.menu.name}</td>
-                            <td>{entity.menu.price}</td>
+                            <td>{entity.frequency}</td>
+                            <td>{entity.mealTotal}</td>
                             <td style={{fontSize: 11}}>{moment(new Date(entity.createdOn)).format("DD-MMM-YYYY LT")}</td>
                         </tr>
                     )
@@ -31,8 +31,8 @@ class MealTransactionTable extends Component {
                             <th>Employee Name</th>
                             <th>Email</th>
                             <th>Username</th>
-                            <th>Menu</th>
-                            <th>Price</th>
+                            <th>Freq</th>
+                            <th>Count</th>
                             <th>Date</th>
                         </tr>
                     </thead>

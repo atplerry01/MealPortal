@@ -18,14 +18,27 @@ class Account extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-
+        this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleSelectedUser = this.handleSelectedUser.bind(this);
     }
-    
+
     componentDidMount() {
         this.getUsers();
         this.getDepartments();
     }
 
+    handleSelectedUser(val) {
+        console.log(val);
+        this.setState({ 
+            firstName: val.user.firstName, 
+            lastName: val.user.lastName, 
+            email: val.user.email, 
+            userName: val.user.userName,
+            cardId: val.user.cardId,
+            departmentId: val.departmentMealProfiling.department.id,
+            selectedUserId: val.user.id
+        });
+    }
     
     handleChange(e) {
         const { name, value } = e.target;
@@ -35,13 +48,13 @@ class Account extends Component {
     handleSubmit(e) {
         e.preventDefault();
 
-        const { firstName, lastName, email, userName, departmentId } = this.state;
+        const { firstName, lastName, email, userName, cardId, departmentId } = this.state;
 
         var modelData = {
-            firstName, lastName, email, userName, departmentId
+            firstName, lastName, email, userName, cardId, departmentId
         }
 
-        if (userName && email && departmentId) {
+        if (userName && email && departmentId &&  cardId) {
             return axios.post(myConfig.apiUrl + "/api/accounts/user/create", modelData).then(response => {
                 this.getUsers();
                 document.getElementById("hideAccountModal").click();
@@ -49,10 +62,30 @@ class Account extends Component {
         }
     }
 
+    handleUpdate(e) {
+        e.preventDefault();
+
+        console.log(this.state);
+        const { cardId, selectedUserId } = this.state;
+
+        var modelData = {
+            userId: selectedUserId,
+            cardId
+        };
+
+       
+        return axios.post(myConfig.apiUrl + "/api/accounts/user/profiles", modelData).then(response => {
+            this.getUsers();
+            // document.getElementById("accountUpdateModal").click();
+            // this.props.history.push("/transactions");
+            window.location.reload();
+        })
+    }
+
 
     render() {
 
-        const { firstName, lastName, email, userName, departments, departmentId } = this.state;
+        const { firstName, lastName, email, userName, departments, cardId, departmentId } = this.state;
         const newDepartments = lookupDropDown(departments);
 
         const dropDepartments = () => {
@@ -65,6 +98,7 @@ class Account extends Component {
                         onChange={this.handleChange}
                         defaultOption="Select Department"
                         options={newDepartments}
+                        readOnly
                     />
                 );
             }
@@ -100,7 +134,7 @@ class Account extends Component {
 
                                 <div className="apply-job-wrapper">
 
-                                   <UserTable users={this.state.userprofiles}></UserTable>
+                                   <UserTable users={this.state.userprofiles} handleSelectedUser = {this.handleSelectedUser}></UserTable>
                                 </div>
 
                             </div>
@@ -116,7 +150,7 @@ class Account extends Component {
 
                     <div className="modal-header">
                         <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 className="modal-title text-center">Create Menu</h4>
+                        <h4 className="modal-title text-center">Create Account</h4>
                     </div>
 
                     <div className="modal-body">
@@ -145,6 +179,11 @@ class Account extends Component {
                                 </div>
 
                                 <div className="form-group">
+                                    <label>Card ID</label>
+                                    <input name="cardId" value={cardId} onChange={this.handleChange} className="form-control" placeholder="" type="text" />
+                                </div>
+
+                                <div className="form-group">
                                     {dropDepartments()}
                                 </div>
 
@@ -160,6 +199,60 @@ class Account extends Component {
 
                 </div>
 
+
+                <div id="accountUpdateModal" className="modal fade login-box-wrapper" tabIndex="-1" data-width="550" style={{ display: "none" }} data-backdrop="static" data-keyboard="false" data-replace="true">
+
+                    <div className="modal-header">
+                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 className="modal-title text-center">Update Account</h4>
+                    </div>
+
+                    <div className="modal-body">
+                        <div className="row gap-20">
+
+                            <div className="col-sm-12 col-md-12">
+
+                                <div className="form-group">
+                                    <label>First Name</label>
+                                    <input name="firstName" value={firstName} onChange={this.handleChange} className="form-control" placeholder="" type="text" readOnly />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Last Name</label>
+                                    <input name="lastName" value={lastName} onChange={this.handleChange} className="form-control" placeholder="" type="text" readOnly />
+                                </div>
+                                
+                                {/* 
+                                <div className="form-group">
+                                    <label>Email</label>
+                                    <input name="email" value={email} onChange={this.handleChange} className="form-control" placeholder="" type="text" readOnly />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Username</label>
+                                    <input name="userName" value={userName} onChange={this.handleChange} className="form-control" placeholder="" type="text" />
+                                </div> */}
+
+                                <div className="form-group">
+                                    <label>Card ID</label>
+                                    <input name="cardId" value={cardId} onChange={this.handleChange} className="form-control" placeholder="" type="text" />
+                                </div>
+
+                                <div className="form-group">
+                                    {dropDepartments()}
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div className="modal-footer text-center">
+                        <button onClick={this.handleUpdate} type="button" className="btn btn-primary">Update</button>
+                        <button id="hideAccountModal" type="button" data-dismiss="modal" className="btn btn-primary btn-inverse">Close</button>
+                    </div>
+
+                    </div>
 
             </div>
         

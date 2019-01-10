@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -53,6 +54,31 @@ namespace MealManager.Api.Controllers
             return mapper.Map<IEnumerable<UserMealProfiling>, IEnumerable<UserMealProfilingModel>>(entity);
         }
 
+        // UserMealProfilingModel
+        [HttpPost("user/profiles")]
+        public async Task<Object> UpdateUserProfilings([FromBody] AccountUpdateResource model)
+        {
+            var user = await context.Users.SingleOrDefaultAsync(it => it.Id == model.UserId);
+
+            if (user == null) return null;
+
+            user.CardId = model.CardId;
+            context.Entry(user).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+
+            // Todo
+            // Update UserMealProfiling
+            DepartmentMealProfiling departProfile = await context.DepartmentMealProfilings.Where(d => d.DepartmentId == model.DepartmentId).FirstOrDefaultAsync();
+            UserMealProfiling userMealProfiling = await context.UserMealProfilings.Where(u => u.UserId == model.UserId).FirstOrDefaultAsync();
+
+            userMealProfiling.CardId = model.CardId;
+       
+            context.Entry(userMealProfiling).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
+
 
 
         [HttpPost("user/create")]
@@ -72,7 +98,8 @@ namespace MealManager.Api.Controllers
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 PhoneNumber = model.PhoneNumber,
-                IsEnabled = true
+                IsEnabled = true,
+                CardId = model.CardId
             };
 
             model.Password = "PassW@rd01";
@@ -89,6 +116,7 @@ namespace MealManager.Api.Controllers
             var userProfiling = new UserMealProfiling()
             {
                 UserId = user.Id,
+                CardId = model.CardId,
                 DepartmentMealProfilingId = departProfile.Id
             };
 
@@ -99,7 +127,7 @@ namespace MealManager.Api.Controllers
             return StatusCode(200, result);
         }
 
-        
+
         [HttpPost("user/profiling")]
         public async Task<IActionResult> CreateUserMealProfile([FromBody] UserMealProfilingSaveModel model)
         {
@@ -107,7 +135,8 @@ namespace MealManager.Api.Controllers
 
             UserMealProfiling newProfile = await context.UserMealProfilings.FirstOrDefaultAsync(u => u.UserId == model.UserId);
 
-            if (newProfile != null) {
+            if (newProfile != null)
+            {
                 return StatusCode(400, "Profiling already exist");
             }
 

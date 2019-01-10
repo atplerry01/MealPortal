@@ -11,6 +11,7 @@ import Transaction from '../pages/transactions';
 import Extract from '../pages/extract';
 import Department from '../pages/extra/department';
 import Menu from '../pages/extra/menu';
+import UserTransaction from '../pages/user-transactions';
 
 class App extends Component {
   render() {
@@ -22,22 +23,17 @@ class App extends Component {
 
           <div className="main-wrapper">
             <div className="cont">
-
               <Route path="/" exact component={Home} />
               <Route path="/dashboard" exact component={Dashboard} />
               <Route path="/accounts" exact component={Account} />
               <Route path="/transactions" exact component={Transaction} />
               <Route path="/extra" exact component={Extract} />
-
               <Route path="/extra/departments" exact component={Department} />
+              <Route path="/extra/transactions/:id" exact component={UserTransaction} />
               <Route path="/extra/menus" exact component={Menu} />
-              
             </div>
-           
             <Footer></Footer>
-
           </div>
-
         </div >
       </Router>
     

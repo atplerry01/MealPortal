@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import toastr from "toastr";
+import ReactToExcel from "react-html-table-to-excel";
 import moment from 'moment';
 
 import SideBar from "../components/common/sidebar";
@@ -9,7 +10,6 @@ import SideBar from "../components/common/sidebar";
 import SelectInput from "../components/common/SelectInput";
 import { lookupUserDropDown } from "../_selector/user-selectors";
 import { myConfig } from "../app/config";
-import MenuList from "../components/extra/MenuList";
 import MealTransactionTable from "../components/extra/MealTransactionTable";
 
 class Transaction extends Component {
@@ -17,7 +17,7 @@ class Transaction extends Component {
         super(props, context);
 
         this.state = {
-            selectedUserId: '',
+            selectedCardId: '',
             selectedTransaction: '',
             userId: '',
             users: [],
@@ -36,11 +36,10 @@ class Transaction extends Component {
 
     handleOrder(entity) {
         var menuEntity = {
-            userId: this.state.selectedUserId,
-            menuId: entity.id
+            cardId: this.state.selectedCardId
         };
 
-        if (menuEntity.userId) {
+        if (menuEntity.cardId) {
             this.postMenu(menuEntity);
         } else {
             toastr.error("Error in User Selection.", "Transaction Error");
@@ -52,9 +51,45 @@ class Transaction extends Component {
         this.setState({ [name]: value });
 
         if (name === 'userId') {
-            this.setState({selectedUserId: value});
+            this.setState({selectedCardId: value});
         }
 
+        if (name === 'search') {
+            let filteredSearch = [];
+            const { menuTransactions } = this.state;
+
+            if (value === '') {
+                this.setState({
+                    filteredList: menuTransactions
+                });
+                return null;
+            }
+
+            menuTransactions.forEach(x => {
+                if (x.user.firstName.toLowerCase().includes(value.toLowerCase()) ||
+                x.user.lastName.toLowerCase().includes(value.toLowerCase()) ||
+                x.user.cardId.toLowerCase().includes(value.toLowerCase())) {
+                    filteredSearch.push(x);
+                }
+            });
+
+            this.setState({ filteredList: filteredSearch });
+
+        }
+    }
+
+    
+    onSearch(entity) {
+        let filteredSearch = [];
+        const {menuTransactions} = this.state;
+        
+        menuTransactions.forEach(x=> {
+            if (menuTransactions.findIndex(y => y.cardId === entity)) {
+                filteredSearch.push(x);
+            }
+        });
+
+        console.log(filteredSearch);
     }
 
     onHandleClick(e) {
@@ -68,8 +103,10 @@ class Transaction extends Component {
 
     render() {
 
-        const { userId, users, menus, menuTransactions, selectedTransaction } = this.state;
+        const { filteredList, userId, users, menuTransactions, todayReport, thisMonthReport, lastMonthReport } = this.state;
         const formatedUsers = lookupUserDropDown(users);
+        
+        console.log(filteredList);
 
         const dropUsers = () => {
             if (formatedUsers) {
@@ -123,15 +160,18 @@ class Transaction extends Component {
 
                                                 <div style={{padding: '10px 0 10px'}}>
                                                     {dropUsers()}
+
+                                                    <button onClick = {this.handleOrder}>Order</button>
                                                 </div>
 
+                                                <div className="col-sm-8 col-md-8">
+                                                        <input type="text" name="search" onChange={this.handleChange} className="form-control" placeholder="Search by Name Or CardId" />
+                                                    </div>
                                                 <div className="recent-job-wrapper mt-30">
 
-                                                    <div className="col-sm-8 col-md-8">
-                                                        
-                                                    </div>
+                                                    <MealTransactionTable menuTransactions={filteredList} />
                                                     
-                                                    <MenuList menus={menus} handleOrder = {this.handleOrder}></MenuList>
+                                                    {/* <MenuList menus={menus} handleOrder = {this.handleOrder}></MenuList> */}
 
                                                 </div>
 
@@ -142,7 +182,11 @@ class Transaction extends Component {
 
 
                                             <div className="pull-right" style={{paddingTop: 20}}>
-                                                <a href="#">Print this doc</a>
+                                                <ReactToExcel
+                                                    className="btn btn-primary pull-right"
+                                                    table="table-to-xls"
+                                                    filename="NexaPos-Report"
+                                                    sheet="Sheet 1">Print this doc </ReactToExcel>
                                             </div>
 
                                             <div style={{ padding: '10px 0 10px' }}>
@@ -153,9 +197,18 @@ class Transaction extends Component {
 
                                             <div>
                                                 <br />
-                                                <MealTransactionTable menuTransactions={menuTransactions} />
+                                                <table id="table-to-xls" width="100%">
+                                                    <tr>
+                                                        {todayReport && <h3>Today Report</h3>}
+                                                        {thisMonthReport && <h3>This Month Report</h3>}
+                                                        {lastMonthReport && <h3>Last Month Report</h3>}
+                                                    </tr>
+                                                    <tr>date range</tr>
+                                                    <tr>
+                                                        <div><MealTransactionTable menuTransactions={menuTransactions} /></div>
+                                                    </tr>
+                                                </table>
                                             </div>
-
                                         </div>
                                     </div>
 
@@ -234,11 +287,12 @@ class Transaction extends Component {
 
     // Get all users
     postMenu(model) {
+        console.log(model);
         return axios.post(myConfig.apiUrl + "/api/transactions/menu", model).then(response => {
             this.getTransactionMenus();
             toastr.success('Menu Transaction Successful', "Meal Post");
         })
-        .catch(function (error) { 
+        .catch(function (error) {
             const response = error.response
             if (response) {
                 toastr.error(response.data, "Post Failed.");
@@ -246,14 +300,6 @@ class Transaction extends Component {
         });
     }
 
-    
-    // postDepartment(model) {
-    //     return axios.post(myConfig.apiUrl + "/api/lookups/departments", model).then(response => {
-    //         document.getElementById("hideDepartmentModal").click();
-    //         this.getDepartments();
-    //     })
-    // }
-    
     getUsers() {
         axios.get(myConfig.apiUrl + "/api/accounts/user/profiles")
             .then(response => {
@@ -272,8 +318,12 @@ class Transaction extends Component {
     getTransactionMenus() {
         axios.get(myConfig.apiUrl + "/api/transactions/today")
             .then(response => {
-                ///toastr.success("Change Successful.", "Password Change");
-                this.setState({ menuTransactions: response.data });
+                this.setState({ 
+                    menuTransactions: response.data, 
+                    filteredList: response.data,
+                    todayReport: true, 
+                    lastMonthReport: false, 
+                    thisMonthReport: false });
             })
     }
 
@@ -281,7 +331,7 @@ class Transaction extends Component {
         axios.get(myConfig.apiUrl + "/api/transactions/thisMonth")
             .then(response => {
                 ///toastr.success("Change Successful.", "Password Change");
-                this.setState({ menuTransactions: response.data });
+                this.setState({ menuTransactions: response.data, todayReport: false, lastMonthReport: false, thisMonthReport: true });
             })
     }
 
@@ -289,7 +339,7 @@ class Transaction extends Component {
         axios.get(myConfig.apiUrl + "/api/transactions/lastMonth")
             .then(response => {
                 ///toastr.success("Change Successful.", "Password Change");
-                this.setState({ menuTransactions: response.data });
+                this.setState({ menuTransactions: response.data, todayReport: false, lastMonthReport: true, thisMonthReport: false });
             })
     }
 

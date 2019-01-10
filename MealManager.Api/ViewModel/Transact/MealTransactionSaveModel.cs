@@ -6,8 +6,8 @@ namespace MealManager.Api.ViewModel.Transact
 {
     public class MealTransactionSaveModel
     {   
-        public string UserId { get; set; }
-        public int MenuId { get; set; }
+        public string CardId { get; set; }
+        //public int MenuId { get; set; }
         //public int UserMealProfilingId { get; set; } get this using userid
     }
 }

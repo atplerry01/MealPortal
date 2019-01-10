@@ -1,5 +1,6 @@
 export const myConfig = {
   importantData: "",
-  //apiUrl2: "https://localhost:5001",
-  apiUrl: "http://localhost:5000"
+  apiUrl2: "http://testmisapi.secureidltd.com",
+  apiUrl: "http://localhost:5000",
+  apiUrl3: "http://localhost:7600"
 };

@@ -10,6 +10,7 @@ namespace MealManager.Api.ViewModel.Account
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         public int? DepartmentId { get; set; }
-
+        public string CardId { get; set; }
     }
 }
+

@@ -26,6 +26,8 @@ namespace MealManager.Api.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<string>("CardId");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -193,15 +195,17 @@ namespace MealManager.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CardId");
+
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<int>("MenuId");
+                    b.Property<int>("Frequency");
+
+                    b.Property<int>("MealTotal");
 
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MenuId");
 
                     b.HasIndex("UserId");
 
@@ -213,6 +217,8 @@ namespace MealManager.Api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CardId");
 
                     b.Property<int>("DepartmentMealProfilingId");
 
@@ -367,11 +373,6 @@ namespace MealManager.Api.Migrations
 
             modelBuilder.Entity("MealManager.Api.Models.Transact.MealTransaction", b =>
                 {
-                    b.HasOne("MealManager.Api.Models.Lookup.Menu", "Menu")
-                        .WithMany()
-                        .HasForeignKey("MenuId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("MealManager.Api.Models.Account.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
